@@ -1,537 +1,23 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="stylesheet" href="style.css">
+
 <title>Civ VII Draft</title>
 
-<style>
-:root{
-    --bg-color:#121820;
-    --card-bg:#1e2633;
-    --text-color:#e2e8f0;
-    --accent-color:#d4af37;
-    --accent-hover:#f3cd57;
-    --danger-color:#a94442;
-    --border-color:#334155;
-}
 
-*{
-    box-sizing:border-box;
-}
-
-html{
-    -webkit-text-size-adjust:100%;
-}
-
-body{
-    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-    background-color:var(--bg-color);
-    color:var(--text-color);
-    margin:0;
-    padding:12px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    overflow-x:hidden;
-}
-
-header{
-    text-align:center;
-    margin-bottom:20px;
-    border-bottom:2px solid var(--accent-color);
-    padding-bottom:10px;
-    width:100%;
-    max-width:1000px;
-}
-
-h1{
-    color:var(--accent-color);
-    margin:0 0 10px 0;
-    text-transform:uppercase;
-    letter-spacing:2px;
-    font-size:clamp(1.5rem,5vw,2.5rem);
-}
-
-.container{
-    width:100%;
-    max-width:1000px;
-}
-
-.settings-panel{
-    background-color:var(--card-bg);
-    border:1px solid var(--border-color);
-    border-radius:12px;
-    padding:16px;
-    margin-bottom:20px;
-    box-shadow:0 4px 6px rgba(0,0,0,0.3);
-}
-
-details{
-    margin-bottom:10px;
-}
-
-summary{
-    cursor:pointer;
-    color:var(--accent-color);
-    font-weight:bold;
-    padding:10px 0;
-    border-bottom:1px solid var(--border-color);
-    font-size:1rem;
-    outline:none;
-    transition:color 0.2s;
-    user-select:none;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    list-style:none;
-}
-
-summary::-webkit-details-marker {
-    display: none;
-}
-
-summary::before {
-    content: "▶";
-    display: inline-block;
-    font-size: 0.75rem;
-    transition: transform 0.2s ease;
-    color: var(--accent-color);
-    flex-shrink: 0;
-}
-
-details[open] > summary::before {
-    transform: rotate(90deg);
-}
-
-summary:hover{
-    color:var(--accent-hover);
-}
-
-.summary-with-tooltip{
-    width:100%;
-    padding-right:4px;
-}
-
-.summary-with-tooltip .summary-text{
-    flex:1;
-}
-
-.summary-help{
-    position:relative;
-    display:inline-flex;
-    align-items:center;
-    flex-shrink:0;
-}
-
-.summary-icon{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    width:1.25rem;
-    height:1.25rem;
-    border-radius:50%;
-    border:1px solid var(--border-color);
-    background:rgba(255,255,255,0.06);
-    color:var(--accent-color);
-    font-size:0.75rem;
-    line-height:1;
-    font-weight:bold;
-    flex-shrink:0;
-    cursor:help;
-}
-
-.summary-tooltip{
-    position:absolute;
-    right:calc(100% + 8px);
-    top:50%;
-    width:min(320px, 85vw);
-    background:#0f172a;
-    color:var(--text-color);
-    border:1px solid var(--border-color);
-    border-radius:10px;
-    padding:10px 12px;
-    box-shadow:0 10px 24px rgba(0,0,0,0.45);
-    opacity:0;
-    visibility:hidden;
-    transform:translateY(-50%) translateX(4px);
-    transition:opacity 0.15s ease, transform 0.15s ease, visibility 0.15s ease;
-    z-index:20;
-    pointer-events:none;
-    font-size:0.85rem;
-    line-height:1.45;
-    font-weight:normal;
-    text-transform:none;
-}
-
-.summary-help:hover .summary-tooltip{
-    opacity:1;
-    visibility:visible;
-    transform:translateY(-50%) translateX(0);
-}
-
-.main-summary{
-    font-size:1.15rem;
-    text-transform:uppercase;
-    border-bottom:2px solid var(--accent-color);
-    margin-bottom:15px;
-}
-
-details[open] summary{
-    margin-bottom:15px;
-}
-
-.filter-group{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-    padding-left:0;
-}
-
-.settings-row{
-    display:flex;
-    gap:15px;
-    margin-bottom:15px;
-    flex-wrap:wrap;
-    padding-left:0;
-    align-items:center;
-}
-
-.settings-row label{
-    display:flex;
-    flex-direction:column;
-    gap:5px;
-    font-size:0.85rem;
-    color:#94a3b8;
-    text-transform:uppercase;
-    flex:1;
-    min-width:220px;
-}
-
-.settings-row select{
-    background-color:var(--bg-color);
-    color:var(--text-color);
-    border:1px solid var(--border-color);
-    padding:10px;
-    border-radius:8px;
-    font-size:0.95rem;
-    min-height:44px;
-}
-
-.settings-row select:focus{
-    border-color:var(--accent-color);
-    outline:none;
-}
-
-.ban-list{
-    display:grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap:10px;
-    padding-left:0;
-    max-height:260px;
-    overflow-y:auto;
-}
-
-.ban-list label{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:0.95rem;
-    cursor:pointer;
-    line-height:1.3;
-}
-
-.ban-list input{
-    accent-color:var(--danger-color);
-    transform:scale(1.2);
-}
-
-.filter-checkbox{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    cursor:pointer;
-    font-weight:bold;
-    font-size:0.92rem;
-    background:rgba(255,255,255,0.03);
-    border:1px solid var(--border-color);
-    border-radius:10px;
-    padding:10px 12px;
-    min-height:44px;
-}
-
-.filter-checkbox input{
-    accent-color:var(--accent-color);
-    transform:scale(1.2);
-    flex-shrink:0;
-}
-
-.global-buttons{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:15px;
-    padding-top:15px;
-    border-top:2px solid var(--border-color);
-}
-
-button{
-    background-color:var(--accent-color);
-    color:#000;
-    border:none;
-    padding:12px 18px;
-    font-weight:bold;
-    border-radius:10px;
-    cursor:pointer;
-    transition:background 0.2s;
-    text-transform:uppercase;
-    font-size:0.9rem;
-    min-height:46px;
-    touch-action:manipulation;
-}
-
-button:hover{
-    background-color:var(--accent-hover);
-}
-
-button.btn-danger{
-    background-color:var(--danger-color);
-    color:#fff;
-}
-
-button.btn-danger:hover{
-    background-color:#c95452;
-}
-
-button.btn-secondary{
-    background-color:#475569;
-    color:#fff;
-}
-
-button.btn-secondary:hover{
-    background-color:#64748b;
-}
-
-.slots-container{
-    display:flex;
-    flex-direction:column;
-    gap:15px;
-}
-
-@keyframes roll-flash {
-    0% {
-        border-left-color: var(--accent-hover);
-        background-color: #2a3447;
-        transform: scale(1.01);
-        box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
-    }
-    100% {
-        border-left-color: var(--accent-color);
-        background-color: var(--card-bg);
-        transform: scale(1);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-}
-
-.slot-card{
-    background-color:var(--card-bg);
-    border:1px solid var(--border-color);
-    border-left:5px solid var(--accent-color);
-    border-radius:12px;
-    padding:16px;
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:15px;
-    flex-wrap:wrap;
-    box-shadow:0 2px 4px rgba(0,0,0,0.2);
-}
-
-.slot-card.flashing {
-    animation: roll-flash 0.4s ease-out;
-}
-
-.slot-title{
-    font-weight:bold;
-    font-size:1.1rem;
-    min-width:80px;
-}
-
-.select-group{
-    display:flex;
-    gap:15px;
-    flex-grow:1;
-    flex-wrap:wrap;
-    width:100%;
-}
-
-.select-wrapper{
-    display:flex;
-    flex-direction:column;
-    gap:5px;
-    flex:1 1 280px;
-    min-width:0;
-}
-
-.label-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-}
-
-.label-row > label{
-    font-size:0.8rem;
-    color:#94a3b8;
-    text-transform:uppercase;
-}
-
-.lock-label{
-    display:flex;
-    align-items:center;
-    gap:4px;
-    font-size:0.75rem !important;
-    color:var(--accent-hover) !important;
-    cursor:pointer;
-    text-transform:none !important;
-    flex-shrink:0;
-}
-
-.lock-label input{
-    cursor:pointer;
-    accent-color:var(--accent-color);
-}
-
-select{
-    background-color:var(--bg-color);
-    color:var(--text-color);
-    border:1px solid var(--border-color);
-    padding:12px;
-    border-radius:10px;
-    font-size:1rem;
-    width:100%;
-    min-height:48px;
-}
-
-select:focus{
-    border-color:var(--accent-color);
-    outline:none;
-}
-
-.slot-actions{
-    display:flex;
-    gap:10px;
-    width:100%;
-}
-
-.slot-actions button{
-    flex:1;
-}
-
-@media (max-width:768px){
-
-    body{
-        padding:10px;
-    }
-
-    .settings-panel{
-        padding:14px;
-    }
-
-    .filter-group{
-        flex-direction:column;
-    }
-
-    .filter-checkbox{
-        width:100%;
-    }
-
-    .settings-row{
-        flex-direction:column;
-        align-items:stretch;
-    }
-
-    .settings-row label{
-        width:100%;
-        min-width:unset;
-    }
-
-    .global-buttons{
-        flex-direction:column;
-    }
-
-    .global-buttons button{
-        width:100%;
-    }
-
-    .slot-card{
-        flex-direction:column;
-        align-items:stretch;
-        padding:14px;
-    }
-
-    .slot-title{
-        min-width:unset;
-        margin-bottom:4px;
-    }
-
-    .select-group{
-        flex-direction:column;
-        width:100%;
-    }
-
-    .select-wrapper{
-        width:100%;
-    }
-
-    .slot-actions{
-        margin-top:4px;
-    }
-
-    .summary-with-tooltip {
-        position: relative;
-    }
-
-    .summary-tooltip {
-        right: 0;
-        left: 0;
-        top: 100%;
-        width: auto;
-        transform: translateY(4px);
-        pointer-events: auto;
-    }
-
-    .summary-help:hover .summary-tooltip {
-        transform: translateY(0);
-    }
-}
-
-@media (max-width:480px){
-
-    h1{
-        letter-spacing:1px;
-    }
-
-    .filter-checkbox{
-        font-size:0.88rem;
-    }
-
-    button{
-        font-size:0.85rem;
-    }
-
-    select{
-        font-size:16px;
-    }
-}
-</style>
 </head>
 
 <body>
 
 <header>
     <h1>Civ VII Draft</h1>
+    <div class="language-flags" aria-hidden="false">
+        <button id="lang-en" class="flag-btn active" title="English" aria-label="English">🇬🇧</button>
+        <button id="lang-de" class="flag-btn" title="Deutsch" aria-label="Deutsch">🇩🇪</button>
+    </div>
 </header>
 
 <div class="container">
@@ -540,18 +26,18 @@ select:focus{
 
         <details class="main-settings">
 
-            <summary class="main-summary">Einstellungen</summary>
+            <summary class="main-summary" id="main-summary">Settings</summary>
 
             <details>
                 <summary class="summary-with-tooltip">
-                    <span class="summary-text">Zufallsvergabe</span>
+                    <span class="summary-text" id="summary-random-title">Draft Logic</span>
                     <span class="summary-help">
                         <span class="summary-icon" aria-hidden="true">i</span>
-                        <span class="summary-tooltip">Beeinflusst den Auswahlpool der Zivilisationen und Anführer*innen basierend auf deren Kombinationsmöglichkeiten. <br><br>
-                            <b>Zufällig: </b>Ohne Einschränkungen.<br>
-                            <b>Historisch: </b>Anführer*innen, die nachweislich Teil der Zivilisation waren. Manche Zivilisationen haben keine Anführer*innen zugeordnet.<br>
-                            <b>Geografisch: </b>Anführer*innen, die vermutlich einmal am selben geografischen Ort gewirkt haben, an dem sich die Zivilisation befindet. Manche Zivilisationen haben keine Anführer*innen zugeordnet. Anführer*innen können verschieden vielen Zivilisationen zugeordnet sein (0 bis alle). <br>
-                            <b>Strategisch: </b>Anführer*innen, die spielstrategisch zur Zivilisation passen. Anführer*innen können verschieden vielen Zivilisationen zugeordnet sein (0 bis alle).                            
+                        <span class="summary-tooltip" id="summary-random-tooltip">Determines which civilization/leader combinations can be drafted based on selected matching rules. <br><br>
+                            <b>Random: </b>No pairing restrictions.<br>
+                            <b>Historic: </b>Leaders that are historically tied to the civilization. Some civilizations have no assigned leaders.<br>
+                            <b>Geographic: </b>Leaders that are associated with roughly the same region as the civilization. Some civilizations have no assigned leaders. Leaders can be linked to many civilizations (0 to all).<br>
+                            <b>Strategic: </b>Leaders that fit the civilization strategically. Leaders can be linked to many civilizations (0 to all).
                         </span>
                     </span>
                 </summary>
@@ -560,22 +46,22 @@ select:focus{
 
                     <label class="filter-checkbox">
                         <input type="checkbox" id="mode-random" class="filter-logic-cb">
-                        Zufällig
+                        <span id="mode-random-label">Random</span>
                     </label>
 
                     <label class="filter-checkbox">
                         <input type="checkbox" id="mode-historic" class="filter-logic-cb" checked>
-                        Historisch
+                        <span id="mode-historic-label">Historic</span>
                     </label>
 
                     <label class="filter-checkbox">
                         <input type="checkbox" id="mode-geografic" class="filter-logic-cb" checked>
-                        Geografisch
+                        <span id="mode-geografic-label">Geographic</span>
                     </label>
 
                     <label class="filter-checkbox">
                         <input type="checkbox" id="mode-strategic" class="filter-logic-cb" checked>
-                        Strategisch
+                        <span id="mode-strategic-label">Strategic</span>
                     </label>
 
                 </div>
@@ -583,10 +69,10 @@ select:focus{
 
             <details>
                 <summary class="summary-with-tooltip">
-                    <span class="summary-text">Spielversionen / DLCs</span>
+                    <span class="summary-text" id="summary-versions-title">Game Versions / DLCs</span>
                     <span class="summary-help">
                         <span class="summary-icon" aria-hidden="true">i</span>
-                        <span class="summary-tooltip">Beeinflusst den Auswahlpool der Zivilisationen und Anführer*innen basierend auf den DLCs.</span>
+                        <span class="summary-tooltip" id="summary-versions-tooltip">Filters the civilization and leader pools by owned game versions and DLC packs.</span>
                     </span>
                 </summary>
                 <div class="filter-group" id="filter-versions"></div>
@@ -594,10 +80,10 @@ select:focus{
 
             <details>
                 <summary class="summary-with-tooltip">
-                    <span class="summary-text">Zeitalter</span>
+                    <span class="summary-text" id="summary-ages-title">Ages</span>
                     <span class="summary-help">
                         <span class="summary-icon" aria-hidden="true">i</span>
-                        <span class="summary-tooltip">Beeinflusst den Auswahlpool der Zivilisationen basierend auf deren Zeitalter.</span>
+                        <span class="summary-tooltip" id="summary-ages-tooltip">Filters the civilization pool by age.</span>
                     </span>
                 </summary>
                 <div class="filter-group" id="filter-ages"></div>
@@ -606,21 +92,21 @@ select:focus{
             <details>
 
                 <summary class="summary-with-tooltip">
-                    <span class="summary-text">Attribute</span>
+                    <span class="summary-text" id="summary-attributes-title">Attributes</span>
                     <span class="summary-help">
                         <span class="summary-icon" aria-hidden="true">i</span>
-                        <span class="summary-tooltip">Beeinflusst den Auswahlpool der Zivilisationen und Anführer*innen basierend auf deren Attributspunkten.
+                        <span class="summary-tooltip" id="summary-attributes-tooltip">Filters civilizations and leaders by attribute points.
                             <br><br>
-                            <b>Filter gilt für:</b><br>
-                            <i>Zivilisation oder Anführer*in:</i> Die Zivilisation oder der*die Anführer*in muss die Bedingung erfüllen. <br>
-                            <i>Zivilisation und Anführer*in:</i> Sowohl die Zivilisation als auch der*die Anführer*in müssen die Bedingung erfüllen. <br>
-                            <i>Zivilisation und Anführer*in kombiniert:</i> Die Kombination aus Zivilisation und Anführer*in muss die Bedingung erfüllen. <br>
-                            <i>Nur Zivilisationen:</i> Nur die Zivilisation muss die Bedingung erfüllen.<br>
-                            <i>Nur Anführer*innen:</i> Nur der*die Anführer*in muss die Bedingung erfüllen.<br><br>
-                            <b>Bedingung:</b><br>
-                            <i>ODER:</i> Eines der ausgewählten Attribute muss vorhanden sein.<br>
-                            <i>UND:</i> Alle gewählten Attribute müssen vorhanden sein. (Achtung: Sowohl Zivilisation als auch Anführer*in haben immer genau zwei Attributspunkte. Maximal 2 (bei "kombiniert" 4) Attribute auswählen!)<br>
-                            <i>NICHT:</i> Keines der ausgewählten Attribute darf vorhanden sein.
+                            <b>Filter applies to:</b><br>
+                            <i>Civilization or Leader:</i> Either one must satisfy the condition.<br>
+                            <i>Civilization and Leader:</i> Both must satisfy the condition.<br>
+                            <i>Combined Civilization + Leader:</i> The combined attributes must satisfy the condition.<br>
+                            <i>Only Civilizations:</i> Only the civilization must satisfy the condition.<br>
+                            <i>Only Leaders:</i> Only the leader must satisfy the condition.<br><br>
+                            <b>Condition:</b><br>
+                            <i>OR:</i> At least one selected attribute must be present.<br>
+                            <i>AND:</i> All selected attributes must be present. (Each civilization and leader has exactly two attributes. Select at most 2 attributes, or 4 in combined mode.)<br>
+                            <i>NOT:</i> None of the selected attributes may be present.
                         </span>
                     </span>
                 </summary>
@@ -628,24 +114,24 @@ select:focus{
                 <div class="settings-row">
 
                     <label>
-                        Filter gilt für:
+                        <span id="attr-target-label">Filter applies to:</span>
 
                         <select id="attr-target">
-                            <option value="either">Zivilisation oder Anführer*in</option>
-                            <option value="both">Zivilisation und Anführer*in</option>
-                            <option value="combined">Zivilisation und Anführer*in kombiniert</option>
-                            <option value="civ">Nur Zivilisationen</option>
-                            <option value="leader">Nur Anführer*innen</option>
+                            <option value="either">Civilization or Leader</option>
+                            <option value="both">Civilization and Leader</option>
+                            <option value="combined">Combined Civilization + Leader</option>
+                            <option value="civ">Only Civilizations</option>
+                            <option value="leader">Only Leaders</option>
                         </select>
                     </label>
 
                     <label>
-                        Bedingung:
+                        <span id="attr-logic-label">Condition:</span>
 
                         <select id="attr-logic">
-                            <option value="or">ODER (Min. eins der gewählten Attribute)</option>
-                            <option value="and">UND (Alle gewählten Attribute --> MAXIMUM BEACHTEN!)</option>
-                            <option value="not">NICHT (Keines der gewählten Attribute)</option>
+                            <option value="or">OR (At least one selected attribute)</option>
+                            <option value="and">AND (All selected attributes)</option>
+                            <option value="not">NOT (None of the selected attributes)</option>
                         </select>
                     </label>
 
@@ -658,19 +144,19 @@ select:focus{
             <details>
 
                 <summary class="summary-with-tooltip">
-                    <span class="summary-text">Verbote</span>
+                    <span class="summary-text" id="summary-bans-title">Bans</span>
                     <span class="summary-help">
                         <span class="summary-icon" aria-hidden="true">i</span>
-                        <span class="summary-tooltip">Bestimmt, welche Zivilisationen und Anführer*innen nicht in den Auswahlpool aufgenommen werden.</span>
+                        <span class="summary-tooltip" id="summary-bans-tooltip">Defines which civilizations and leaders are excluded from the draft pool.</span>
                     </span>
                 </summary>
 
                 <details>
                     <summary class="summary-with-tooltip">
-                        <span class="summary-text">Zivilisationen</span>
+                        <span class="summary-text" id="summary-bans-civs-title">Civilizations</span>
                         <span class="summary-help">
                             <span class="summary-icon" aria-hidden="true">i</span>
-                            <span class="summary-tooltip">Bestimmt, welche Zivilisationen nicht in den Auswahlpool aufgenommen werden.</span>
+                            <span class="summary-tooltip" id="summary-bans-civs-tooltip">Defines which civilizations are excluded from the draft pool.</span>
                         </span>
                     </summary>
                     <div class="ban-list" id="ban-civs"></div>
@@ -678,10 +164,10 @@ select:focus{
 
                 <details>
                     <summary class="summary-with-tooltip">
-                        <span class="summary-text">Anführer*innen</span>
+                        <span class="summary-text" id="summary-bans-leaders-title">Leaders</span>
                         <span class="summary-help">
                             <span class="summary-icon" aria-hidden="true">i</span>
-                            <span class="summary-tooltip">Bestimmt, welche Anführer*innen nicht in den Auswahlpool aufgenommen werden.</span>
+                            <span class="summary-tooltip" id="summary-bans-leaders-tooltip">Defines which leaders are excluded from the draft pool.</span>
                         </span>
                     </summary>
                     <div class="ban-list" id="ban-leaders"></div>
@@ -692,8 +178,19 @@ select:focus{
         </details>
 
         <div class="global-buttons">
-            <button id="add-slot-btn" class="btn-secondary">+ Slot hinzufügen</button>
-            <button id="roll-all-btn">Alle Slots würfeln</button>
+            <label class="slot-count-control" for="slot-count-select">
+                <span id="slot-count-label">Slots</span>
+                <select id="slot-count-select" class="slot-count-select" aria-label="Slot count">
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                    <option value="8">8</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                </select>
+            </label>
+            <button id="add-slot-btn" class="btn-secondary">+ Add Slot</button>
+            <button id="roll-all-btn">Roll All Slots</button>
         </div>
 
     </div>
@@ -702,818 +199,10 @@ select:focus{
 
 </div>
 
-<script>
-    // ==========================================
-    // DATENSTRUKTUR
-    // ==========================================
-    
-    const versions = [
-        { id: "base", name: "Base Game"},
-        { id: "deluxe", name: "Deluxe Content Pack"},
-        { id: "founder", name: "Founders Content Pack"},
-        { id: "tecumseh_shawnee", name: "Tecumseh and Shawnee Pack"},
-        { id: "napoleon", name: "Napoleon Pack"},
-        { id: "persona_napoleon", name: "Persona Pack - Napoleon"},     
-        { id: "crotw", name: "Crossroads of the World Collection"},
-        { id: "rtr", name: "Right to Rule Collection"},
-        { id: "top", name: "Tides of Power Collection"}
-    ]
-
-    const attributes = [
-        { id: "c", name: "Cultural"},
-        { id: "e", name: "Economic"},
-        { id: "m", name: "Militaristic"},
-        { id: "s", name: "Scientific"},
-        { id: "d", name: "Diplomatic"},
-        { id: "x", name: "Expansionist"},
-        { id: "w", name: "Wildcard"}
-    ]
-
-    const attributeColors = {
-        "c": { color: "#ff69b4" },
-        "e": { color: "#ffd700" },
-        "m": { color: "#ff4444" },
-        "s": { color: "#33b5e5" },
-        "d": { color: "#9c27b0" },
-        "x": { color: "#00C851" },
-        "w": { style: "background: linear-gradient(90deg, #ff4444, #ff8c00, #ffd700, #00C851, #33b5e5, #9c27b0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: bold;" }
-    };
-
-    const ages = [
-        { id: "ant", name: "Antiquity"},
-        { id: "exp", name: "Exploration"},
-        { id: "mod", name: "Modern"}
-    ]
-
-    const civilizations = [
-        { id: "achaemenid_persia", name: "Achaemenid Persia", attributes: ["e", "m"], age: "ant", game_version: "base"},
-        { id: "aksumite", name: "Aksumite", attributes: ["c", "e"], age: "ant", game_version: "base"},
-        { id: "assyrian", name: "Assyrian", attributes: ["m", "s"], age: "ant", game_version: "rtr"},
-        { id: "carthaginian", name: "Carthaginian", attributes: ["m", "e"], age: "ant", game_version: "crotw"},
-        { id: "eyptian", name: "Egyptian", attributes: ["c", "e"], age: "ant", game_version: "base"},
-        { id: "greek", name: "Greek", attributes: ["c", "d"], age: "ant", game_version: "base"},
-        { id: "han", name: "Han", attributes: ["d", "s"], age: "ant", game_version: "base"},
-        { id: "khmer", name: "Khmer", attributes: ["x", "s"], age: "ant", game_version: "base"},
-        { id: "mauryan", name: "Mauryan", attributes: ["m", "s"], age: "ant", game_version: "base"},
-        { id: "maya", name: "Maya", attributes: ["c", "s"], age: "ant", game_version: "base"},
-        { id: "mississippian", name: "Mississippian", attributes: ["e", "x"], age: "ant", game_version: "base"},
-        { id: "roman", name: "Roman", attributes: ["c", "m"], age: "ant", game_version: "base"},
-        { id: "silla_korea", name: "Silla Korean", attributes: ["d", "e"], age: "ant", game_version: "rtr"},
-        { id: "tongan", name: "Tongan", attributes: ["d", "e"], age: "ant", game_version: "top"},
-        { id: "abbasid", name: "Abbasid", attributes: ["x", "s"], age: "exp", game_version: "base"},
-        { id: "bulgarian", name: "Bulgarian", attributes: ["x", "m"], age: "exp", game_version: "crotw"},
-        { id: "chola", name: "Chola", attributes: ["d", "e"], age: "exp", game_version: "base"},
-        { id: "hawaiian", name: "Hawaiian", attributes: ["c", "x"], age: "exp", game_version: "base"},
-        { id: "icelandic", name: "Icelandic", attributes: ["c", "m"], age: "exp", game_version: "top"},
-        { id: "incan", name: "Incan", attributes: ["e", "x"], age: "exp", game_version: "base"},
-        { id: "majapahit", name: "Majapahit", attributes: ["c", "x"], age: "exp", game_version: "base"},
-        { id: "ming", name: "Ming", attributes: ["e", "s"], age: "exp", game_version: "base"},
-        { id: "mongolian", name: "Mongolian", attributes: ["x", "m"], age: "exp", game_version: "base"},
-        { id: "norman", name: "Norman", attributes: ["d", "m"], age: "exp", game_version: "base"},
-        { id: "pirate", name: "Pirate", attributes: ["e", "m"], age: "exp", game_version: "top"},
-        { id: "shawnee", name: "Shawnee", attributes: ["d", "e"], age: "exp", game_version: "tecumseh_shawnee"},
-        { id: "songhai", name: "Songhai", attributes: ["e", "m"], age: "exp", game_version: "base"},
-        { id: "spanish", name: "Spanish", attributes: ["e", "m"], age: "exp", game_version: "base"},
-        { id: "vietnamese", name: "Vietnamese", attributes: ["c", "x"], age: "exp", game_version: "rtr"},
-        { id: "american", name: "American", attributes: ["d", "e"], age: "mod", game_version:"base"},
-        { id: "british", name: "British", attributes: ["e", "s"], age: "mod", game_version: "crotw"},
-        { id: "bugandan", name: "Bugandan", attributes: ["c", "x"], age: "mod", game_version: "base"},
-        { id: "french_imperial", name: "French Imperial", attributes: ["c", "d"], age: "mod", game_version: "base"},
-        { id: "meiji_japanese", name: "Meiji Japanese", attributes: ["m", "s"], age: "mod", game_version: "base"},
-        { id: "mexican", name: "Mexican", attributes: ["c", "d"], age: "mod", game_version: "base"},
-        { id: "mughal", name: "Mughal", attributes: ["e", "x"], age: "mod", game_version: "base"},
-        { id: "nepalese", name: "Nepalese", attributes: ["d", "c"], age: "mod", game_version: "crotw"},
-        { id: "ottoman", name: "Ottoman", attributes: ["c", "m"], age: "mod", game_version: "top"},
-        { id: "prussian", name: "Prussian", attributes: ["m", "d"], age: "mod", game_version: "base"},
-        { id: "qajar", name: "Qajar", attributes: ["d", "x"], age: "mod", game_version: "rtr"},
-        { id: "qing", name: "Qing", attributes: ["e", "x"], age: "mod", game_version: "base"},
-        { id: "russian", name: "Russian", attributes: ["c", "s"], age: "mod", game_version: "base"},
-        { id: "siamese", name: "Siamese", attributes: ["c", "d"], age: "mod", game_version: "base"},
-    ];
-
-    const leaders = [
-        { id: "ada_lovelace", name: "Ada Lovelace", attributes: ["c", "s"], game_version: "crotw"},
-        { id: "alexander", name: "Alexander", attributes: ["c", "m"], game_version: "base"},
-        { id: "amina", name: "Amina", attributes: ["e", "m"], game_version: "base"},
-        { id: "ashoka_wc", name: "Ashoka, World Conqueror", attributes: ["d", "m"], game_version: "founder"},
-        { id: "ashoka_wr", name: "Ashoka, World Renouncer", attributes: ["d", "x"], game_version: "base"},
-        { id: "augustus", name: "Augustus", attributes: ["c", "x"], game_version: "base"},
-        { id: "benjamin_franklin", name: "Benjamin Franklin", attributes: ["d", "s"], game_version: "base"},
-        { id: "catherine", name: "Catherine the Great", attributes: ["c", "s"], game_version: "base"},
-        { id: "charlemagne", name: "Charlemagne", attributes: ["m", "s"], game_version: "base"},
-        { id: "confucius", name: "Confucius", attributes: ["x", "s"], game_version: "base"},
-        { id: "edward_teach", name: "Edward Teach", attributes: ["m", "e"], game_version: "top"},
-        { id: "friedrich_baroque", name: "Friedrich, Baroque", attributes: ["m", "c"], game_version: "deluxe"},
-        { id: "friedrich_oblique", name: "Friedrich, Oblique", attributes: ["m", "s"], game_version: "base"},
-        { id: "genghis_khan", name: "Genghis Khan", attributes: ["m", "x"], game_version: "rtr"},
-        { id: "gilgamesh", name: "Gilgamesh", attributes: ["d", "m"], game_version: "base"},
-        { id: "harriet_tubman", name: "Harriet Tubman", attributes: ["d", "m"], game_version: "base"},
-        { id: "hatshepsut", name: "Hatshepsut", attributes: ["c", "e"], game_version: "base"},
-        { id: "himiko_hs", name: "Himiko, High Shaman", attributes: ["c", "d"], game_version: "founder"},
-        { id: "himiko_qw", name: "Himiko, Queen of Wa", attributes: ["d", "s"], game_version: "base"},
-        { id: "ibn_battuta", name: "Ibn Battuta", attributes: ["x", "w"], game_version: "base"},
-        { id: "isabella", name: "Isabella", attributes: ["e", "x"], game_version: "base"},
-        { id: "jose_rizal", name: "José Rizal", attributes: ["c", "d"], game_version: "base"},
-        { id: "lafayette", name: "Lafayette", attributes: ["c", "d"], game_version: "base"},
-        { id: "lakshmibai", name: "Lakshmibai", attributes: ["m", "d"], game_version: "rtr"},
-        { id: "machiavelli", name: "Machiavelli", attributes: ["d", "e"], game_version: "base"},
-        { id: "napoleon_e", name: "Napoleon, Emperor", attributes: ["e", "d"], game_version: "napoleon"},
-        { id: "napoleon_r", name: "Napoleon, Revolutionary", attributes: ["m", "c"], game_version: "persona_napoleon"},
-        { id: "pachacuti", name: "Pachacuti", attributes: ["e", "x"], game_version: "base"},
-        { id: "sayyida_al_hurra", name: "Sayyida al Hurra", attributes:["m", "d"], game_version: "top"},
-        { id: "simon_bolivar", name: "Simón Bolívar", attributes: ["m", "x"], game_version: "crotw"},
-        { id: "tecumseh", name: "Tecumseh", attributes: ["m", "d"], game_version: "tecumseh_shawnee"},
-        { id: "trung_trac", name: "Trung Trac", attributes: ["m", "s"], game_version: "base"},
-        { id: "xerxes_kk", name: "Xerxes, King of Kings", attributes: ["e", "m"], game_version: "base"},
-        { id: "xerxes_a", name: "Xerxes, the Achaemenid", attributes: ["c", "e"], game_version: "deluxe"}
-    ];
-
-    const historicalPairs = {
-        "achaemenid_persia": ["xerxes_kk", "xerxes_a"],
-        "american": ["benjamin_franklin", "harriet_tubman"],
-        "british": ["ada_lovelace", "edward_teach"],
-        "egyptian": ["hatshepsut"],
-        "french_imperial": ["lafayette", "napoleon_e", "napoleon_r"],
-        "greek": ["alexander"],
-        "han": ["confucius"],
-        "incan": ["pachacuti"],
-        "mauryan": ["ashoka_wc", "ashoka_wr"],
-        "mongolian": ["genghis_khan"],
-        "norman": ["charlemagne"],
-        "pirate": ["edward_teach"],
-        "prussian": ["friedrich_baroque", "friedrich_oblique"],
-        "roman": ["augustus"],
-        "russian": ["catherine"],
-        "shawnee": ["tecumseh"],
-        "spanish": ["isabella"],
-    };
-
-    const geograficalPairs = {
-        "abbasid": ["gilgamesh", "ibn_battuta", "sayyida_al_hurra", "xerxes_kk", "xerxes_a"],
-        "achaemenid_persia": ["xerxes_kk", "xerxes_a", "genghis_khan", "gilgamesh"],
-        "aksumite": ["hatshepsut"],
-        "american": ["benjamin_franklin", "harriet_tubman", "edward_teach", "tecumseh"],
-        "assyrian": ["gilgamesh", "xerxes_kk", "xerxes_a"],
-        "british": ["ada_lovelace", "edward_teach", "augustus"],
-        "bulgarian": ["alexander", "augustus", "catherine"],
-        "carthaginian": ["alexander", "augustus", "ibn_battuta", "isabella", "sayyida_al_hurra"],
-        "chola": ["ashoka_wc", "ashoka_wr", "lakshmibai"],
-        "egyptian": ["hatshepsut", "augustus"],
-        "french_imperial": ["lafayette", "napoleon_e", "napoleon_r", "charlemagne"],
-        "greek": ["alexander", "augustus"],
-        "han": ["confucius", "genghis_khan", "himiko_hs"],
-        "icelandic": ["ada_lovelace"],
-        "incan": ["pachacuti", "simon_bolivar"],
-        "khmer": ["trung_trac"],
-        "mauryan": ["ashoka_wc", "ashoka_wr", "lakshmibai"],
-        "mexican": ["isabella"],
-        "ming": ["confucius", "genghis_khan", "himiko_hs"],
-        "mississippian": ["benjamin_franklin", "edward_teach", "harriet_tubman", "tecumseh"],
-        "mongolian": ["genghis_khan", "catherine"],
-        "mughal": ["ashoka_wc", "ashoka_wr", "genghis_khan", "lakshmibai"],
-        "nepalese": ["ashoka_wc", "ashoka_wr", "lakshmibai"],
-        "norman": ["charlemagne", "augustus", "lafayette", "napoleon_e", "napoleon_r"],
-        "ottoman": ["alexander", "augustus", "gilgamesh", "xerxes_kk", "xerxes_a"],
-        "pirate": ["edward_teach"],
-        "prussian": ["friedrich_baroque", "friedrich_oblique", "catherine"],
-        "qajar": ["genghis_khan", "gilgamesh", "xerxes_kk", "xerxes_a"],
-        "qing": ["confucius", "genghis_khan", "himiko_hs"],
-        "roman": ["augustus", "charlemagne", "isabella", "lafayette", "machiavelli", "napoleon_e", "napoleon_r"],
-        "russian": ["catherine", "friedrich_baroque", "friedrich_oblique", "genghis_khan"],
-        "shawnee": ["tecumseh", "benjamin_franklin", "harriet_tubman"],
-        "siamese": ["trung_trac"],
-        "silla_korea": ["confucius", "himiko_hs"],
-        "songhai": ["amina", "harriet_tubman"],
-        "spanish": ["isabella", "augustus"],    
-        "vietnamese": ["jose_rizal", "trung_trac"],    
-    };    
-
-    const strategicPairs = {
-        "achaemenid_persia": ["friedrich_oblique", "simon_bolivar", "trung_trac", "xerxes_kk"],
-        "aksumite": ["hatshepsut", "xerxes_a", "amina"],
-        "assyrian": ["charlemagne", "friedrich_baroque", "genghis_khan", "trung_trac", "alexander"],       
-        "carthaginian": ["augustus", "isabella", "sayyida_al_hurra", "hatshepsut", "edward_teach"],  
-        "egyptian": ["alexander", "hatshepsut", "amina"],
-        "greek": ["lafayette", "lakshmibai", "tecumseh", "himiko_hs"],
-        "han": ["charlemagne", "confucius", "lafayette"],
-        "khmer": ["augustus", "pachacuti", "hatshepsut", "confucius", "ashoka_wr"],
-        "mauryan": ["ashoka_wc", "ashoka_wr", "charlemagne", "himiko_hs", "jose_rizal"],
-        "maya": ["ada_lovelace", "himiko_hs", "trung_trac"],
-        "mississippian": ["xerxes_a", "hatshepsut", "amina"],
-        "roman": ["augustus", "lafayette", "napoleon_r"],
-        "silla_korea": ["xerxes_a", "himiko_qw", "gilgamesh", "amina"],
-        "tongan": ["isabella", "tecumseh", "xerxes_a", "edward_teach", "sayyida_al_hurra"],
-        "abbasid": ["pachacuti", "confucius", "ashoka_wr"],
-        "bulgarian": ["edward_teach", "friedrich_baroque", "catherine"],
-        "chola": ["sayyida_al_hurra", "xerxes_a"],
-        "hawaiian": ["sayyida_al_hurra", "isabella", "edward_teach"],
-        "icelandic": ["ada_lovelace", "catherine", "edward_teach", "friedrich_baroque", "isabella", "sayyida_al_hurra"],
-        "incan": ["pachacuti", "xerxes_a", "confucius", "ashoka_wr"],
-        "majapahit": ["catherine", "confucius", "hatshepsut", "sayyida_al_hurra"],
-        "ming": ["trung_trac", "lafayette", "friedrich_oblique", "confucius", "benjamin_franklin", "amina", "ada_lovelace"],
-        "mongolian": ["amina", "ashoka_wc", "charlemagne", "genghis_khan", "napoleon_r", "simon_bolivar", "xerxes_kk"],
-        "norman": ["sayyida_al_hurra", "lafayette", "genghis_khan", "charlemagne"],
-        "pirate": ["edward_teach", "ibn_battuta", "isabella", "machiavelli"],
-        "shawnee": ["tecumseh", "lakshmibai", "hatshepsut", "catherine", "augustus", "amina"],
-        "songhai": ["amina", "hatshepsut", "xerxes_a"],
-        "spanish": ["isabella", "amina"],
-        "vietnamese": ["trung_trac", "charlemagne"],
-        "american": ["amina", "hatshepsut"],
-        "british": ["sayyida_al_hurra", "isabella", "hatshepsut", "edward_teach", "augustus"],
-        "bugandan": ["edward_teach", "hatshepsut", "sayyida_al_hurra"],
-        "french_imperial": ["alexander", "ashoka_wc", "ashoka_wr", "charlemagne", "himiko_hs", "napoleon_r"],
-        "meiji_japanese": ["trung_trac", "sayyida_al_hurra", "isabella", "friedrich_oblique", "edward_teach", "charlemagne", "benjamin_franklin"],
-        "mexican": ["ada_lovelace", "ashoka_wc", "ashoka_wr", "catherine", "charlemagne", "himiko_hs", "jose_rizal", "lafayette"],
-        "mughal": ["pachacuti", "isabella", "augustus", "alexander", "xerxes_kk"],
-        "nepalese": ["benjamin_franklin", "gilgamesh", "himiko_qw", "lafayette", "machiavelli", "pachacuti"],
-        "ottoman": ["xerxes_kk", "simon_bolivar", "napoleon_e", "friedrich_baroque", "catherine", "ashoka_wc"],
-        "prussian": ["friedrich_oblique", "genghis_khan", "harriet_tubman", "napoleon_e", "napoleon_r", "simon_bolivar", "trung_trac", "xerxes_kk", "sayyida_al_hurra"],
-        "qajar": ["xerxes_kk", "himiko_qw", "harriet_tubman", "gilgamesh", "benjamin_franklin"],
-        "qing": ["amina", "confucius", "hatshepsut", "xerxes_a"],
-        "russian": ["harriet_tubman", "catherine", "benjamin_franklin", "ada_lovelace"],
-        "siamese": ["gilgamesh", "himiko_hs", "himiko_qw", "lakshmibai", "tecumseh"]
-    };
-
-    civilizations.sort((a, b) => a.name.localeCompare(b.name));
-    leaders.sort((a, b) => a.name.localeCompare(b.name));
-
-    const civilizationById = Object.fromEntries(civilizations.map(civ => [civ.id, civ]));
-    const leaderById = Object.fromEntries(leaders.map(leader => [leader.id, leader]));
-
-    let uniqueDomId = 0;
-
-    document.addEventListener("DOMContentLoaded", () => {
-        function buildFilterCheckboxes(containerId, dataArray, cssClass, colorMap = null) {
-            const container = document.getElementById(containerId);
-            dataArray.forEach(item => {
-                const label = document.createElement("label");
-                label.className = "filter-checkbox";
-                
-                let textStyle = "";
-                let boxStyle = "";
-                
-                if (colorMap && colorMap[item.id]) {
-                    if (colorMap[item.id].style) {
-                        textStyle = colorMap[item.id].style;
-                    } else if (colorMap[item.id].color) {
-                        textStyle = `color: ${colorMap[item.id].color};`;
-                        boxStyle = `accent-color: ${colorMap[item.id].color};`;
-                    }
-                }
-
-                label.innerHTML = `<input type="checkbox" class="${cssClass}" value="${item.id}" style="${boxStyle}" checked> <span style="${textStyle}">${item.name}</span>`;
-                container.appendChild(label);
-            });
-        }
-
-        function buildBanCheckboxes(containerId, dataArray, cssClass) {
-            const container = document.getElementById(containerId);
-
-            dataArray.forEach(item => {
-                const label = document.createElement("label");
-
-                label.innerHTML = `
-                    <input type="checkbox" class="${cssClass}" value="${item.id}">
-                    ${item.name}
-                `;
-
-                container.appendChild(label);
-            });
-        }
-
-        buildFilterCheckboxes("filter-versions", versions, "filter-version");
-        buildFilterCheckboxes("filter-ages", ages, "filter-age");
-        buildFilterCheckboxes("filter-attributes", attributes, "filter-attribute", attributeColors);
-
-        buildBanCheckboxes("ban-civs", civilizations, "ban-civ");
-        buildBanCheckboxes("ban-leaders", leaders, "ban-leader");
-
-        document.addEventListener("change", (event) => {
-            if (
-                event.target.matches(".filter-logic-cb, .filter-version, .filter-age, .filter-attribute, .ban-civ, .ban-leader, #attr-target, #attr-logic") ||
-                event.target.matches(".civ-select, .leader-select")
-            ) {
-                refreshAllSlotOptions();
-            }
-        });
-
-        addSlot();
-        addSlot();
-
-        refreshAllSlotOptions();
-
-        document.getElementById("add-slot-btn").addEventListener("click", () => addSlot());
-        document.getElementById("roll-all-btn").addEventListener("click", rollAllSlots);
-    });
-
-    function getCurrentFilterState(excludedSlotId = null) {
-        const activeVersions = Array.from(document.querySelectorAll('.filter-version:checked')).map(cb => cb.value);
-        const activeAges = Array.from(document.querySelectorAll('.filter-age:checked')).map(cb => cb.value);
-        const activeAttributes = Array.from(document.querySelectorAll('.filter-attribute:checked')).map(cb => cb.value);
-
-        const bannedCivs = Array.from(document.querySelectorAll('.ban-civ:checked')).map(cb => cb.value);
-        const bannedLeaders = Array.from(document.querySelectorAll('.ban-leader:checked')).map(cb => cb.value);
-
-        const modeRandom = document.getElementById("mode-random").checked;
-        const modeHistoric = document.getElementById("mode-historic").checked;
-        const modeGeografic = document.getElementById("mode-geografic").checked;
-        const modeStrategic = document.getElementById("mode-strategic").checked;
-
-        return {
-            activeVersions,
-            activeAges,
-            activeAttributes,
-            bannedCivs,
-            bannedLeaders,
-            attrTarget: document.getElementById("attr-target").value,
-            attrLogic: document.getElementById("attr-logic").value,
-            useRandomLogic: (!modeRandom && !modeHistoric && !modeGeografic && !modeStrategic) || modeRandom,
-            modeHistoric,
-            modeGeografic,
-            modeStrategic,
-            usedCivs: [],
-            usedLeaders: []
-        };
-    }
-
-    function collectUsedSelections(excludedSlotId = null) {
-        const usedCivs = [];
-        const usedLeaders = [];
-
-        document.querySelectorAll(".slot-card").forEach(card => {
-            if (card.id === excludedSlotId) {
-                return;
-            }
-
-            const civValue = card.querySelector(".civ-select").value;
-            const leaderValue = card.querySelector(".leader-select").value;
-
-            if (civValue !== "random") {
-                usedCivs.push(civValue);
-            }
-
-            if (leaderValue !== "random") {
-                usedLeaders.push(leaderValue);
-            }
-        });
-
-        return { usedCivs, usedLeaders };
-    }
-
-    function pairMatchesCurrentFilters(civ, leader, filterState) {
-        if (!filterState.activeVersions.includes(civ.game_version)) return false;
-        if (!filterState.activeAges.includes(civ.age)) return false;
-        if (!filterState.activeVersions.includes(leader.game_version)) return false;
-
-        if (filterState.bannedCivs.includes(civ.id)) return false;
-        if (filterState.bannedLeaders.includes(leader.id)) return false;
-
-        const civMatch = hasAttributeMatch(civ.attributes, filterState.activeAttributes, filterState.attrLogic);
-        const leaderMatch = hasAttributeMatch(leader.attributes, filterState.activeAttributes, filterState.attrLogic);
-
-        if (filterState.attrTarget === "civ" && !civMatch) return false;
-        if (filterState.attrTarget === "leader" && !leaderMatch) return false;
-        if (filterState.attrTarget === "either" && !civMatch && !leaderMatch) return false;
-        if (filterState.attrTarget === "both" && (!civMatch || !leaderMatch)) return false;
-
-        if (filterState.attrTarget === "combined") {
-            const combinedAttrs = [...new Set([...civ.attributes, ...leader.attributes])];
-
-            if (!hasAttributeMatch(combinedAttrs, filterState.activeAttributes, filterState.attrLogic)) {
-                return false;
-            }
-        }
-
-        let isMatch = false;
-
-        if (filterState.useRandomLogic) isMatch = true;
-
-        if (filterState.modeHistoric && historicalPairs[civ.id] && historicalPairs[civ.id].includes(leader.id)) {
-            isMatch = true;
-        }
-
-        if (filterState.modeGeografic && geograficalPairs[civ.id] && geograficalPairs[civ.id].includes(leader.id)) {
-            isMatch = true;
-        }
-
-        if (filterState.modeStrategic && strategicPairs[civ.id] && strategicPairs[civ.id].includes(leader.id)) {
-            isMatch = true;
-        }
-
-        return isMatch;
-    }
-
-    function getValidLeaderIdsForCiv(civId, filterState) {
-        const civ = civilizationById[civId];
-
-        if (!civ) {
-            return [];
-        }
-
-        const validLeaderIds = [];
-
-        leaders.forEach(leader => {
-            if (pairMatchesCurrentFilters(civ, leader, filterState)) {
-                validLeaderIds.push(leader.id);
-            }
-        });
-
-        return validLeaderIds;
-    }
-
-    function getValidCivIdsForLeader(leaderId, filterState) {
-        const leader = leaderById[leaderId];
-
-        if (!leader) {
-            return [];
-        }
-
-        const validCivIds = [];
-
-        civilizations.forEach(civ => {
-            if (pairMatchesCurrentFilters(civ, leader, filterState)) {
-                validCivIds.push(civ.id);
-            }
-        });
-
-        return validCivIds;
-    }
-
-    function getValidCivIds(filterState, leaderValue = "random") {
-        if (leaderValue !== "random") {
-            return getValidCivIdsForLeader(leaderValue, filterState);
-        }
-
-        const validCivIds = [];
-
-        civilizations.forEach(civ => {
-            const validLeaderIds = getValidLeaderIdsForCiv(civ.id, filterState);
-
-            if (validLeaderIds.length > 0) {
-                validCivIds.push(civ.id);
-            }
-        });
-
-        return validCivIds;
-    }
-
-    function getValidLeaderIds(filterState, civValue = "random") {
-        if (civValue !== "random") {
-            return getValidLeaderIdsForCiv(civValue, filterState);
-        }
-
-        const validLeaderIds = [];
-
-        leaders.forEach(leader => {
-            const validCivIds = getValidCivIdsForLeader(leader.id, filterState);
-
-            if (validCivIds.length > 0) {
-                validLeaderIds.push(leader.id);
-            }
-        });
-
-        return validLeaderIds;
-    }
-
-    function refreshSlotOptions(slotCard) {
-        const civSelect = slotCard.querySelector(".civ-select");
-        const leaderSelect = slotCard.querySelector(".leader-select");
-        const civLock = slotCard.querySelector(".civ-lock");
-        const leaderLock = slotCard.querySelector(".leader-lock");
-
-        const filterState = getCurrentFilterState(slotCard.id);
-        const usedSelections = collectUsedSelections(slotCard.id);
-
-        filterState.usedCivs = usedSelections.usedCivs;
-        filterState.usedLeaders = usedSelections.usedLeaders;
-
-        const storedCivValue = slotCard.dataset.selectedCiv || civSelect.value || "random";
-        const storedLeaderValue = slotCard.dataset.selectedLeader || leaderSelect.value || "random";
-
-        const civOptions = getValidCivIds(filterState, storedLeaderValue === "random" ? "random" : storedLeaderValue)
-            .filter(civId => !filterState.usedCivs.includes(civId));
-
-        const leaderOptions = getValidLeaderIds(filterState, storedCivValue === "random" ? "random" : storedCivValue)
-            .filter(leaderId => !filterState.usedLeaders.includes(leaderId));
-
-        const validCivSet = new Set(civOptions);
-        const validLeaderSet = new Set(leaderOptions);
-
-        civSelect.innerHTML = [
-            '<option value="random">[ Zufall ]</option>',
-            ...civOptions
-                .filter(civId => civilizationById[civId])
-                .map(civId => `<option value="${civId}">${civilizationById[civId].name}</option>`)
-        ].join("");
-
-        leaderSelect.innerHTML = [
-            '<option value="random">[ Zufall ]</option>',
-            ...leaderOptions
-                .filter(leaderId => leaderById[leaderId])
-                .map(leaderId => `<option value="${leaderId}">${leaderById[leaderId].name}</option>`)
-        ].join("");
-
-        if (storedCivValue !== "random" && validCivSet.has(storedCivValue)) {
-            civSelect.value = storedCivValue;
-        } else {
-            civSelect.value = "random";
-            civLock.checked = false;
-        }
-
-        if (storedLeaderValue !== "random" && validLeaderSet.has(storedLeaderValue)) {
-            leaderSelect.value = storedLeaderValue;
-        } else {
-            leaderSelect.value = "random";
-            leaderLock.checked = false;
-        }
-
-        slotCard.dataset.selectedCiv = civSelect.value;
-        slotCard.dataset.selectedLeader = leaderSelect.value;
-    }
-
-    function refreshAllSlotOptions() {
-        document.querySelectorAll(".slot-card").forEach(refreshSlotOptions);
-    }
-
-    function addSlot() {
-        uniqueDomId++;
-        const container = document.getElementById("slots-container");
-
-        const slotCard = document.createElement("div");
-        slotCard.className = "slot-card";
-        slotCard.id = `slot-id-${uniqueDomId}`;
-        slotCard.dataset.rolled = "false";
-        slotCard.dataset.selectedCiv = "random";
-        slotCard.dataset.selectedLeader = "random";
-
-        slotCard.innerHTML = `
-            <div class="slot-title">Slot</div>
-            <div class="select-group">
-                <div class="select-wrapper">
-                    <div class="label-row">
-                        <label>Zivilisation</label>
-                        <label class="lock-label" title="Schützt vor dem Überschreiben beim Würfeln"><input type="checkbox" class="civ-lock"> 🔒 Fixieren</label>
-                    </div>
-                    <select class="civ-select">
-                        <option value="random">[ Zufall ]</option>
-                        ${civilizations.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="select-wrapper">
-                    <div class="label-row">
-                        <label>Anführer*in</label>
-                        <label class="lock-label" title="Schützt vor dem Überschreiben beim Würfeln"><input type="checkbox" class="leader-lock"> 🔒 Fixieren</label>
-                    </div>
-                    <select class="leader-select">
-                        <option value="random">[ Zufall ]</option>
-                        ${leaders.map(l => `<option value="${l.id}">${l.name}</option>`).join('')}
-                    </select>
-                </div>
-            </div>
-            <div class="slot-actions">
-                <button class="roll-single-btn btn-secondary">Würfeln</button>
-                <button class="remove-btn btn-danger">X</button>
-            </div>
-        `;
-
-        slotCard.querySelector(".civ-select").addEventListener("change", (e) => {
-            slotCard.querySelector(".civ-lock").checked = (e.target.value !== "random");
-            slotCard.dataset.selectedCiv = e.target.value;
-            refreshAllSlotOptions();
-        });
-
-        slotCard.querySelector(".leader-select").addEventListener("change", (e) => {
-            slotCard.querySelector(".leader-lock").checked = (e.target.value !== "random");
-            slotCard.dataset.selectedLeader = e.target.value;
-            refreshAllSlotOptions();
-        });
-
-        slotCard.querySelector(".roll-single-btn").addEventListener("click", () => rollSlot(slotCard.id));
-
-        slotCard.querySelector(".remove-btn").addEventListener("click", () => {
-            slotCard.remove();
-            reindexSlots();
-        });
-
-        container.appendChild(slotCard);
-        reindexSlots();
-        refreshAllSlotOptions();
-    }
-
-    function reindexSlots() {
-        const cards = document.querySelectorAll(".slot-card");
-
-        cards.forEach((card, index) => {
-            card.querySelector(".slot-title").textContent = `Slot ${index + 1}`;
-        });
-    }
-
-    function rollAllSlots() {
-        const cards = document.querySelectorAll(".slot-card");
-
-        cards.forEach(card => {
-            if (!card.querySelector(".civ-lock").checked) {
-                card.querySelector(".civ-select").value = "random";
-                card.dataset.selectedCiv = "random";
-            }
-
-            if (!card.querySelector(".leader-lock").checked) {
-                card.querySelector(".leader-select").value = "random";
-                card.dataset.selectedLeader = "random";
-            }
-        });
-
-        cards.forEach(card => rollSlot(card.id));
-    }
-
-    function hasAttributeMatch(attrList, activeAttributes, logic) {
-        if (logic === "not") {
-            return !attrList.some(attr => activeAttributes.includes(attr));
-        }
-        return logic === "or"
-            ? attrList.some(attr => activeAttributes.includes(attr))
-            : activeAttributes.every(attr => attrList.includes(attr));
-    }
-
-    function rollSlot(slotId) {
-        const card = document.getElementById(slotId);
-
-        const civSelect = card.querySelector(".civ-select");
-        const leaderSelect = card.querySelector(".leader-select");
-
-        const civLock = card.querySelector(".civ-lock").checked;
-        const leaderLock = card.querySelector(".leader-lock").checked;
-
-        const fixedCiv = civLock ? civSelect.value : "random";
-        const fixedLeader = leaderLock ? leaderSelect.value : "random";
-
-        const modeRandom = document.getElementById("mode-random").checked;
-        const modeHistoric = document.getElementById("mode-historic").checked;
-        const modeGeografic = document.getElementById("mode-geografic").checked;
-        const modeStrategic = document.getElementById("mode-strategic").checked;
-
-        const useRandomLogic =
-            (!modeRandom && !modeHistoric && !modeGeografic && !modeStrategic)
-            || modeRandom;
-
-        const activeVersions = Array.from(document.querySelectorAll('.filter-version:checked')).map(cb => cb.value);
-        const activeAges = Array.from(document.querySelectorAll('.filter-age:checked')).map(cb => cb.value);
-        const activeAttributes = Array.from(document.querySelectorAll('.filter-attribute:checked')).map(cb => cb.value);
-
-        const bannedCivs = Array.from(document.querySelectorAll('.ban-civ:checked')).map(cb => cb.value);
-        const bannedLeaders = Array.from(document.querySelectorAll('.ban-leader:checked')).map(cb => cb.value);
-
-        const attrTarget = document.getElementById("attr-target").value;
-        const attrLogic = document.getElementById("attr-logic").value;
-
-        const usedCivs = [];
-        const usedLeaders = [];
-
-        document.querySelectorAll(".slot-card").forEach(c => {
-            if (c.id !== slotId) {
-                const cCiv = c.querySelector(".civ-select").value;
-                const cLeader = c.querySelector(".leader-select").value;
-
-                if (cCiv !== "random") usedCivs.push(cCiv);
-                if (cLeader !== "random") usedLeaders.push(cLeader);
-            }
-        });
-
-        if (activeAttributes.length === 0) {
-            alert(`${card.querySelector(".slot-title").textContent}: Keine Attribute ausgewählt!`);
-            return;
-        }
-
-        const civToValidLeaders = {};
-
-        civilizations.forEach(civ => {
-
-            if (fixedCiv !== "random" && civ.id !== fixedCiv) return;
-
-            if (bannedCivs.includes(civ.id)) return;
-
-            if (fixedCiv === "random") {
-                if (!activeVersions.includes(civ.game_version)) return;
-                if (!activeAges.includes(civ.age)) return;
-                if (usedCivs.includes(civ.id)) return;
-
-                if (attrTarget === "civ") {
-                    if (!hasAttributeMatch(civ.attributes, activeAttributes, attrLogic)) {
-                        return;
-                    }
-                }
-            }
-
-            const validLeadersForThisCiv = [];
-
-            leaders.forEach(leader => {
-
-                if (fixedLeader !== "random" && leader.id !== fixedLeader) return;
-
-                if (bannedLeaders.includes(leader.id)) return;
-
-                if (fixedLeader === "random") {
-                    if (!activeVersions.includes(leader.game_version)) return;
-                    if (usedLeaders.includes(leader.id)) return;
-
-                    if (attrTarget === "leader") {
-                        if (!hasAttributeMatch(leader.attributes, activeAttributes, attrLogic)) {
-                            return;
-                        }
-                    }
-                }
-
-                const civMatch = hasAttributeMatch(civ.attributes, activeAttributes, attrLogic);
-                const leaderMatch = hasAttributeMatch(leader.attributes, activeAttributes, attrLogic);
-
-                if (attrTarget === "either") {
-                    // "Zivilisation oder Anführer": Es reicht, wenn einer der beiden die Bedingung erfüllt.
-                    // Wir werfen die Kombination also nur raus, wenn BEIDE die Bedingung verfehlen.
-                    if (!civMatch && !leaderMatch) return;
-                }
-
-                if (attrTarget === "both") {
-                    // "Zivilisation und Anführer": BEIDE müssen die Bedingung erfüllen (also hier: BEIDE ohne Militär sein).
-                    // Wir werfen die Kombination raus, sobald AUCH NUR EINER die Bedingung verfehlt (also das Attribut hat).
-                    if (!civMatch || !leaderMatch) return;
-                }
-
-                if (attrTarget === "combined") {
-                    const combinedAttrs = [...new Set([...civ.attributes, ...leader.attributes])];
-
-                    if (!hasAttributeMatch(combinedAttrs, activeAttributes, attrLogic)) {
-                        return;
-                    }
-                }
-
-                let isMatch = false;
-
-                if (useRandomLogic) isMatch = true;
-
-                if (
-                    modeHistoric &&
-                    historicalPairs[civ.id] &&
-                    historicalPairs[civ.id].includes(leader.id)
-                ) {
-                    isMatch = true;
-                }
-
-                if (
-                    modeGeografic &&
-                    geograficalPairs[civ.id] &&
-                    geograficalPairs[civ.id].includes(leader.id)
-                ) {
-                    isMatch = true;
-                }
-
-                if (
-                    modeStrategic &&
-                    strategicPairs[civ.id] &&
-                    strategicPairs[civ.id].includes(leader.id)
-                ) {
-                    isMatch = true;
-                }
-
-                if (isMatch || (fixedCiv !== "random" && fixedLeader !== "random")) {
-                    validLeadersForThisCiv.push(leader.id);
-                }
-            });
-
-            if (validLeadersForThisCiv.length > 0) {
-                civToValidLeaders[civ.id] = validLeadersForThisCiv;
-            }
-        });
-
-        const validCivIds = Object.keys(civToValidLeaders);
-
-        if (validCivIds.length === 0) {
-            const slotName = card.querySelector(".slot-title").textContent;
-
-            alert(`${slotName}: Keine gültige Kombination gefunden!`);
-
-            return;
-        }
-
-        const finalCivId =
-            validCivIds[Math.floor(Math.random() * validCivIds.length)];
-
-        const allowedLeaders = civToValidLeaders[finalCivId];
-
-        const finalLeaderId =
-            allowedLeaders[Math.floor(Math.random() * allowedLeaders.length)];
-
-        if (!civLock) civSelect.value = finalCivId;
-        if (!leaderLock) leaderSelect.value = finalLeaderId;
-        card.dataset.selectedCiv = civSelect.value;
-        card.dataset.selectedLeader = leaderSelect.value;
-        card.dataset.rolled = "true";
-
-        // Visuelles Feedback triggern (Animation zurücksetzen und neu starten)
-        card.classList.remove("flashing");
-        void card.offsetWidth; 
-        card.classList.add("flashing");
-    }
-</script>
+<script src="JS/data.js"></script>
+<script src="JS/names_de.js"></script>
+<script src="JS/language.js"></script>
+<script src="JS/drafting.js"></script>
 
 </body>
 </html>
