@@ -25,6 +25,10 @@ function getTranslatedName(type, id, defaultName) {
     return defaultName;
 }
 
+function isPlaceholderSelection(value) {
+    return value === "none" || value === "random";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     function buildFilterCheckboxes(containerId, dataArray, cssClass, colorMap = null, type = null) {
         const container = document.getElementById(containerId);
@@ -167,11 +171,11 @@ function collectUsedSelections(excludedSlotId = null) {
         const civValue = card.querySelector(".civ-select").value;
         const leaderValue = card.querySelector(".leader-select").value;
 
-        if (civValue !== "random") {
+        if (!isPlaceholderSelection(civValue)) {
             usedCivs.push(civValue);
         }
 
-        if (leaderValue !== "random") {
+        if (!isPlaceholderSelection(leaderValue)) {
             usedLeaders.push(leaderValue);
         }
     });
@@ -258,8 +262,8 @@ function getValidCivIdsForLeader(leaderId, filterState) {
     return validCivIds;
 }
 
-function getValidCivIds(filterState, leaderValue = "random") {
-    if (leaderValue !== "random") {
+function getValidCivIds(filterState, leaderValue = "none") {
+    if (!isPlaceholderSelection(leaderValue)) {
         return getValidCivIdsForLeader(leaderValue, filterState);
     }
 
@@ -276,8 +280,8 @@ function getValidCivIds(filterState, leaderValue = "random") {
     return validCivIds;
 }
 
-function getValidLeaderIds(filterState, civValue = "random") {
-    if (civValue !== "random") {
+function getValidLeaderIds(filterState, civValue = "none") {
+    if (!isPlaceholderSelection(civValue)) {
         return getValidLeaderIdsForCiv(civValue, filterState);
     }
 
@@ -299,28 +303,38 @@ function refreshSlotOptions(slotCard) {
     const leaderSelect = slotCard.querySelector(".leader-select");
     const civLock = slotCard.querySelector(".civ-lock");
     const leaderLock = slotCard.querySelector(".leader-lock");
-
     const filterState = getCurrentFilterState(slotCard.id);
     const usedSelections = collectUsedSelections(slotCard.id);
 
     filterState.usedCivs = usedSelections.usedCivs;
     filterState.usedLeaders = usedSelections.usedLeaders;
 
-    const storedCivValue = slotCard.dataset.selectedCiv || civSelect.value || "random";
-    const storedLeaderValue = slotCard.dataset.selectedLeader || leaderSelect.value || "random";
+    const storedCivValue = slotCard.dataset.selectedCiv || civSelect.value || "none";
+    const storedLeaderValue = slotCard.dataset.selectedLeader || leaderSelect.value || "none";
 
-    const civOptions = getValidCivIds(filterState, storedLeaderValue === "random" ? "random" : storedLeaderValue)
+    const civOptions = getValidCivIds(filterState, isPlaceholderSelection(storedLeaderValue) ? "none" : storedLeaderValue)
         .filter(civId => !filterState.usedCivs.includes(civId));
 
-    const leaderOptions = getValidLeaderIds(filterState, storedCivValue === "random" ? "random" : storedCivValue)
+    const leaderOptions = getValidLeaderIds(filterState, isPlaceholderSelection(storedCivValue) ? "none" : storedCivValue)
         .filter(leaderId => !filterState.usedLeaders.includes(leaderId));
+
+    const renderedCivOptions = [...civOptions];
+    const renderedLeaderOptions = [...leaderOptions];
+
+    if (!isPlaceholderSelection(storedCivValue) && civilizationById[storedCivValue] && !renderedCivOptions.includes(storedCivValue)) {
+        renderedCivOptions.push(storedCivValue);
+    }
+
+    if (!isPlaceholderSelection(storedLeaderValue) && leaderById[storedLeaderValue] && !renderedLeaderOptions.includes(storedLeaderValue)) {
+        renderedLeaderOptions.push(storedLeaderValue);
+    }
 
     const validCivSet = new Set(civOptions);
     const validLeaderSet = new Set(leaderOptions);
 
     civSelect.innerHTML = [
-        `<option value="random">${t("randomOption")}</option>`,
-        ...civOptions
+        `<option value="none">${t("noneOption")}</option>`,
+        ...renderedCivOptions
             .filter(civId => civilizationById[civId])
             .map(civId => {
                 const defaultName = civilizationById[civId].name;
@@ -330,8 +344,8 @@ function refreshSlotOptions(slotCard) {
     ].join("");
 
     leaderSelect.innerHTML = [
-        `<option value="random">${t("randomOption")}</option>`,
-        ...leaderOptions
+        `<option value="none">${t("noneOption")}</option>`,
+        ...renderedLeaderOptions
             .filter(leaderId => leaderById[leaderId])
             .map(leaderId => {
                 const defaultName = leaderById[leaderId].name;
@@ -340,17 +354,21 @@ function refreshSlotOptions(slotCard) {
             })
     ].join("");
 
-    if (storedCivValue !== "random" && validCivSet.has(storedCivValue)) {
+    if (!isPlaceholderSelection(storedCivValue) && validCivSet.has(storedCivValue)) {
+        civSelect.value = storedCivValue;
+    } else if (!isPlaceholderSelection(storedCivValue) && civilizationById[storedCivValue]) {
         civSelect.value = storedCivValue;
     } else {
-        civSelect.value = "random";
+        civSelect.value = "none";
         civLock.checked = false;
     }
 
-    if (storedLeaderValue !== "random" && validLeaderSet.has(storedLeaderValue)) {
+    if (!isPlaceholderSelection(storedLeaderValue) && validLeaderSet.has(storedLeaderValue)) {
+        leaderSelect.value = storedLeaderValue;
+    } else if (!isPlaceholderSelection(storedLeaderValue) && leaderById[storedLeaderValue]) {
         leaderSelect.value = storedLeaderValue;
     } else {
-        leaderSelect.value = "random";
+        leaderSelect.value = "none";
         leaderLock.checked = false;
     }
 
@@ -416,8 +434,8 @@ function addSlot(options = {}) {
     slotCard.className = "slot-card";
     slotCard.id = `slot-id-${uniqueDomId}`;
     slotCard.dataset.rolled = "false";
-    slotCard.dataset.selectedCiv = "random";
-    slotCard.dataset.selectedLeader = "random";
+    slotCard.dataset.selectedCiv = "none";
+    slotCard.dataset.selectedLeader = "none";
 
     slotCard.innerHTML = `
         <div class="slot-title">Slot</div>
@@ -428,7 +446,7 @@ function addSlot(options = {}) {
                     <label class="lock-label civ-lock-label" title="${t("lockTitle")}"><input type="checkbox" class="civ-lock"> <span class="civ-lock-text">🔒 ${t("lock")}</span></label>
                 </div>
                 <select class="civ-select">
-                    <option value="random">${t("randomOption")}</option>
+                    <option value="none">${t("noneOption")}</option>
                     ${civilizations.map(c => `<option value="${c.id}">${getTranslatedName('civ', c.id, c.name)}</option>`).join('')}
                 </select>
             </div>
@@ -438,7 +456,7 @@ function addSlot(options = {}) {
                     <label class="lock-label leader-lock-label" title="${t("lockTitle")}"><input type="checkbox" class="leader-lock"> <span class="leader-lock-text">🔒 ${t("lock")}</span></label>
                 </div>
                 <select class="leader-select">
-                    <option value="random">${t("randomOption")}</option>
+                    <option value="none">${t("noneOption")}</option>
                     ${leaders.map(l => `<option value="${l.id}">${getTranslatedName('leader', l.id, l.name)}</option>`).join('')}
                 </select>
             </div>
@@ -450,14 +468,20 @@ function addSlot(options = {}) {
     `;
 
     slotCard.querySelector(".civ-select").addEventListener("change", (e) => {
-        slotCard.querySelector(".civ-lock").checked = (e.target.value !== "random");
+        slotCard.querySelector(".civ-lock").checked = !isPlaceholderSelection(e.target.value);
         slotCard.dataset.selectedCiv = e.target.value;
+        if (!isPlaceholderSelection(e.target.value)) {
+            slotCard.dataset.rolled = "true";
+        }
         refreshAllSlotOptions();
     });
 
     slotCard.querySelector(".leader-select").addEventListener("change", (e) => {
-        slotCard.querySelector(".leader-lock").checked = (e.target.value !== "random");
+        slotCard.querySelector(".leader-lock").checked = !isPlaceholderSelection(e.target.value);
         slotCard.dataset.selectedLeader = e.target.value;
+        if (!isPlaceholderSelection(e.target.value)) {
+            slotCard.dataset.rolled = "true";
+        }
         refreshAllSlotOptions();
     });
 
@@ -494,13 +518,13 @@ function rollAllSlots() {
 
     cards.forEach(card => {
         if (!card.querySelector(".civ-lock").checked) {
-            card.querySelector(".civ-select").value = "random";
-            card.dataset.selectedCiv = "random";
+            card.querySelector(".civ-select").value = "none";
+            card.dataset.selectedCiv = "none";
         }
 
         if (!card.querySelector(".leader-lock").checked) {
-            card.querySelector(".leader-select").value = "random";
-            card.dataset.selectedLeader = "random";
+            card.querySelector(".leader-select").value = "none";
+            card.dataset.selectedLeader = "none";
         }
     });
 
@@ -529,8 +553,8 @@ function rollSlot(slotId) {
     const civLock = card.querySelector(".civ-lock").checked;
     const leaderLock = card.querySelector(".leader-lock").checked;
 
-    const fixedCiv = civLock ? civSelect.value : "random";
-    const fixedLeader = leaderLock ? leaderSelect.value : "random";
+    const fixedCiv = civLock && !isPlaceholderSelection(civSelect.value) ? civSelect.value : "none";
+    const fixedLeader = leaderLock && !isPlaceholderSelection(leaderSelect.value) ? leaderSelect.value : "none";
 
     const modeRandom = document.getElementById("mode-random").checked;
     const modeHistoric = document.getElementById("mode-historic").checked;
@@ -559,8 +583,8 @@ function rollSlot(slotId) {
             const cCiv = c.querySelector(".civ-select").value;
             const cLeader = c.querySelector(".leader-select").value;
 
-            if (cCiv !== "random") usedCivs.push(cCiv);
-            if (cLeader !== "random") usedLeaders.push(cLeader);
+            if (!isPlaceholderSelection(cCiv)) usedCivs.push(cCiv);
+            if (!isPlaceholderSelection(cLeader)) usedLeaders.push(cLeader);
         }
     });
 
@@ -573,11 +597,11 @@ function rollSlot(slotId) {
 
     civilizations.forEach(civ => {
 
-        if (fixedCiv !== "random" && civ.id !== fixedCiv) return;
+        if (fixedCiv !== "none" && civ.id !== fixedCiv) return;
 
         if (bannedCivs.includes(civ.id)) return;
 
-        if (fixedCiv === "random") {
+        if (fixedCiv === "none") {
             if (!activeVersions.includes(civ.game_version)) return;
             if (!activeAges.includes(civ.age)) return;
             if (usedCivs.includes(civ.id)) return;
@@ -593,11 +617,11 @@ function rollSlot(slotId) {
 
         leaders.forEach(leader => {
 
-            if (fixedLeader !== "random" && leader.id !== fixedLeader) return;
+            if (fixedLeader !== "none" && leader.id !== fixedLeader) return;
 
             if (bannedLeaders.includes(leader.id)) return;
 
-            if (fixedLeader === "random") {
+            if (fixedLeader === "none") {
                 if (!activeVersions.includes(leader.game_version)) return;
                 if (usedLeaders.includes(leader.id)) return;
 
@@ -659,7 +683,7 @@ function rollSlot(slotId) {
                 isMatch = true;
             }
 
-            if (isMatch || (fixedCiv !== "random" && fixedLeader !== "random")) {
+            if (isMatch || (fixedCiv !== "none" && fixedLeader !== "none")) {
                 validLeadersForThisCiv.push(leader.id);
             }
         });
@@ -687,10 +711,21 @@ function rollSlot(slotId) {
     const finalLeaderId =
         allowedLeaders[Math.floor(Math.random() * allowedLeaders.length)];
 
-    if (!civLock) civSelect.value = finalCivId;
-    if (!leaderLock) leaderSelect.value = finalLeaderId;
-    card.dataset.selectedCiv = civSelect.value;
-    card.dataset.selectedLeader = leaderSelect.value;
+    // NEU: Werte erst in das dataset schreiben statt direkt in das <select>.
+    // So kennt refreshAllSlotOptions() das richtige Ziel, erstellt die zugehörige <option>
+    // und setzt dann erfolgreich den <select>-Wert.
+    if (!civLock) {
+        card.dataset.selectedCiv = finalCivId;
+    } else {
+        card.dataset.selectedCiv = civSelect.value;
+    }
+
+    if (!leaderLock) {
+        card.dataset.selectedLeader = finalLeaderId;
+    } else {
+        card.dataset.selectedLeader = leaderSelect.value;
+    }
+    
     card.dataset.rolled = "true";
 
     refreshAllSlotOptions();

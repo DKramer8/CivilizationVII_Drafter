@@ -41,7 +41,7 @@ const i18n = {
         lock: "Lock",
         lockTitle: "Protects this selection from being overwritten when rolling",
         roll: "Roll",
-        randomOption: "[ Random ]",
+        noneOption: "None",
         noAttributes: "No attributes selected!",
         noCombination: "No valid combination found!"
     },
@@ -85,7 +85,7 @@ const i18n = {
         lock: "Fixieren",
         lockTitle: "Schützt vor dem Überschreiben beim Würfeln",
         roll: "Würfeln",
-        randomOption: "[ Zufall ]",
+        noneOption: "Nichts",
         noAttributes: "Keine Attribute ausgewählt!",
         noCombination: "Keine gültige Kombination gefunden!"
     }
