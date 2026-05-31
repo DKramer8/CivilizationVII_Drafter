@@ -202,7 +202,7 @@ const strategicPairs = {
     "bulgarian": ["edward_teach", "friedrich_baroque", "catherine"],
     "chola": ["sayyida_al_hurra", "xerxes_a"],
     "hawaiian": ["sayyida_al_hurra", "isabella", "edward_teach"],
-    "icelandic": ["ada_lovelace", "catherine", "edward_teach", "friedrich_baroque", "isabella", "sayyida_al_hurra"],
+    "icelandic": ["ada_lovelace", "catherine", "edward_teach", "friedrich_baroque", "isabella", "sayyida_al_hurra", "ibn_battuta"],
     "incan": ["pachacuti", "xerxes_a", "confucius", "ashoka_wr"],
     "majapahit": ["catherine", "confucius", "hatshepsut", "sayyida_al_hurra"],
     "ming": ["trung_trac", "lafayette", "friedrich_oblique", "confucius", "benjamin_franklin", "amina", "ada_lovelace"],
