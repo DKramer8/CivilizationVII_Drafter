@@ -12,7 +12,7 @@ const versions = [
     { id: "crotw", name: "Crossroads of the World Collection"},
     { id: "rtr", name: "Right to Rule Collection"},
     { id: "top", name: "Tides of Power Collection"},
-    // { id: "brush_blade", name: "Brush and Blade Collection"},
+    { id: "brush_blade", name: "Brush and Blade Collection"},
 ]
 
 const attributes = [
