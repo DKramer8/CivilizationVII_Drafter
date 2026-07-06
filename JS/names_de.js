@@ -33,6 +33,7 @@ window.nameTranslations.de = {
         "eyptian": "Ägyptisch",
         "greek": "Griechisch",
         "han": "Han",
+        "heian_japanese": "Heian-Japanisch",
         "khmer": "Khmer",
         "mauryan": "Maurya",
         "maya": "Maya",
@@ -68,6 +69,7 @@ window.nameTranslations.de = {
         "qajar": "Kadscharen",
         "qing": "Qing",
         "russian": "Russisch",
+        "sengoku_japanese": "Sengoku-Japanisch",
         "siamese": "Siamesisch"
     },
     leader: {
