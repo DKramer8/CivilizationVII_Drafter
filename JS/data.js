@@ -60,9 +60,10 @@ const civilizations = [
     { id: "abbasid", name: "Abbasid", attributes: ["x", "s"], age: "exp", game_version: "base"},
     { id: "bulgarian", name: "Bulgarian", attributes: ["x", "m"], age: "exp", game_version: "crotw"},
     { id: "chola", name: "Chola", attributes: ["d", "e"], age: "exp", game_version: "base"},
+    { id: "goryeo", name: "Goryeo", attributes: ["c", "d"], age: "exp", game_version: "brush_blade"},
     { id: "hawaiian", name: "Hawaiian", attributes: ["c", "x"], age: "exp", game_version: "base"},
     { id: "icelandic", name: "Icelandic", attributes: ["c", "m"], age: "exp", game_version: "top"},
-    { id: "incan", name: "Incan", attributes: ["e", "x"], age: "exp", game_version: "base"},
+    { id: "incan", name: "Incan", attributes: ["e", "x"], age: "exp", game_version: "base"},    
     { id: "majapahit", name: "Majapahit", attributes: ["c", "x"], age: "exp", game_version: "base"},
     { id: "ming", name: "Ming", attributes: ["e", "s"], age: "exp", game_version: "base"},
     { id: "mongolian", name: "Mongolian", attributes: ["x", "m"], age: "exp", game_version: "base"},
@@ -77,6 +78,7 @@ const civilizations = [
     { id: "british", name: "British", attributes: ["e", "s"], age: "mod", game_version: "crotw"},
     { id: "bugandan", name: "Bugandan", attributes: ["c", "x"], age: "mod", game_version: "base"},
     { id: "french_imperial", name: "French Imperial", attributes: ["c", "d"], age: "mod", game_version: "base"},
+    { id: "joseon", name: "Joseon", attributes: ["c", "x"], age: "mod", game_version: "brush_blade"},
     { id: "meiji_japanese", name: "Meiji Japanese", attributes: ["m", "s"], age: "mod", game_version: "base"},
     { id: "mexican", name: "Mexican", attributes: ["c", "d"], age: "mod", game_version: "base"},
     { id: "mughal", name: "Mughal", attributes: ["e", "x"], age: "mod", game_version: "base"},
@@ -124,7 +126,8 @@ const leaders = [
     { id: "toyotomi_hideyoshi", name: "Toyotomi Hideyoshi", attributes: ["c", "m"], game_version: "brush_blade"},
     { id: "trung_trac", name: "Trung Trac", attributes: ["m", "s"], game_version: "base"},
     { id: "xerxes_kk", name: "Xerxes, King of Kings", attributes: ["e", "m"], game_version: "base"},
-    { id: "xerxes_a", name: "Xerxes, the Achaemenid", attributes: ["c", "e"], game_version: "deluxe"}
+    { id: "xerxes_a", name: "Xerxes, the Achaemenid", attributes: ["c", "e"], game_version: "deluxe"},
+    { id: "yi_sun_sin", name: "Yi Sun-sin", attributes: ["m", "s"], game_version: "brush_blade"}
 ];
 
 const historicalPairs = {
@@ -136,6 +139,7 @@ const historicalPairs = {
     "greek": ["alexander"],
     "han": ["confucius"],
     "incan": ["pachacuti"],
+    "joseon": ["yi_sun_sin"],
     "mauryan": ["ashoka_wc", "ashoka_wr"],
     "mongolian": ["genghis_khan"],
     "norman": ["charlemagne"],
@@ -160,11 +164,13 @@ const geograficalPairs = {
     "chola": ["ashoka_wc", "ashoka_wr", "lakshmibai"],
     "egyptian": ["hatshepsut", "augustus", "alexander"],
     "french_imperial": ["lafayette", "napoleon_e", "napoleon_r", "charlemagne", "augustus"],
+    "goryeo": ["yi_sun_sin"],
     "greek": ["alexander", "augustus"],
     "han": ["confucius", "genghis_khan"],
     "heian_japanese": ["himiko_hs", "himiko_qw", "toyotomi_hideyoshi"],
     "icelandic": ["ada_lovelace"],
     "incan": ["pachacuti", "simon_bolivar"],
+    "joseon": ["yi_sun_sin"],
     "khmer": ["trung_trac"],
     "mauryan": ["ashoka_wc", "ashoka_wr", "lakshmibai"],
     "meiji_japanese": ["himiko_hs", "himiko_qw", "toyotomi_hideyoshi"],
